@@ -1,0 +1,6 @@
+@uni.learn.api_HostAddress = http://localhost:5171
+
+GET {{uni.learn.api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
