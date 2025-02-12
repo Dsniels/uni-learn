@@ -26,6 +26,7 @@ public static class ServicesCollectionsExtensions
         services.AddDbContext<MainDbContext>(opt => opt.UseSqlServer(connectionString));
         services.AddDbContext<SecurityDbContext>(opt => opt.UseSqlServer(IdentityConnectionString));
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddScoped<ITokenService, TokenService>();
 
         var builder = services.AddIdentityCore<Usuario>();
         builder = new IdentityBuilder(builder.UserType, builder.Services);
