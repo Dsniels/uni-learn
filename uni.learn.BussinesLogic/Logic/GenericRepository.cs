@@ -1,0 +1,57 @@
+using System;
+using Microsoft.EntityFrameworkCore;
+using uni.learn.BussinesLogic.Data;
+using uni.learn.core.Entity;
+using uni.learn.core.Interfaces;
+
+namespace uni.learn.BussinesLogic.Logic;
+
+public class GenericRepository<T> : IGenericRepository<T> where T : Base
+{
+    private readonly MainDbContext _context;
+    public GenericRepository(MainDbContext context)
+    {
+        _context = _context;
+    }
+    public async Task<int> Add(T entity)
+    {
+        _context.Set<T>().Add(entity);
+        return await _context.SaveChangesAsync();
+    }
+
+    public void AddEntity(T entity)
+    {
+        _context.Set<T>().Add(entity);
+    }
+
+    public Task<int> CountAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<int> DeleteEntity(T entity)
+    {
+
+        _context.Set<T>().Remove(entity);
+        return await _context.SaveChangesAsync();
+
+    }
+
+    public async Task<IReadOnlyCollection<T>> GetAllAsync()
+    {
+        return await _context.Set<T>().ToListAsync();
+
+    }
+
+    public async Task<T> GetByID(int id)
+    {
+        return await _context.Set<T>().FindAsync(id);
+    }
+
+    public async Task<int> Update(T entity)
+    {
+        _context.Set<T>().Attach(entity);
+        _context.Entry(entity).State = EntityState.Modified;
+        return await _context.SaveChangesAsync();
+    }
+}

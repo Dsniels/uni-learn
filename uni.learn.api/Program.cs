@@ -21,6 +21,7 @@ using (var scope = app.Services.CreateScope())
     var service = scope.ServiceProvider;
     var context = service.GetRequiredService<MainDbContext>();
     await context.Database.MigrateAsync();
+    await MainDbContextData.seedDataAsync(context);
 
     var IdentityContext = service.GetRequiredService<SecurityDbContext>();
     var userManager = service.GetRequiredService<UserManager<Usuario>>();

@@ -7,7 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using uni.learn.BussinesLogic.Context;
 using uni.learn.BussinesLogic.Data;
+using uni.learn.BussinesLogic.Logic;
 using uni.learn.core.Entity;
+using uni.learn.core.Interfaces;
 
 namespace uni.learn.api;
 
@@ -23,7 +25,7 @@ public static class ServicesCollectionsExtensions
 
         services.AddDbContext<MainDbContext>(opt => opt.UseSqlServer(connectionString));
         services.AddDbContext<SecurityDbContext>(opt => opt.UseSqlServer(IdentityConnectionString));
-
+        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
         var builder = services.AddIdentityCore<Usuario>();
         builder = new IdentityBuilder(builder.UserType, builder.Services);
