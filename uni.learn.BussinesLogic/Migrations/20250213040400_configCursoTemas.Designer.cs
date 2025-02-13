@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using uni.learn.BussinesLogic.Data;
 
@@ -10,9 +11,11 @@ using uni.learn.BussinesLogic.Data;
 namespace uni.learn.BussinesLogic.Migrations
 {
     [DbContext(typeof(MainDbContext))]
-    partial class MainDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250213040400_configCursoTemas")]
+    partial class configCursoTemas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,7 +36,7 @@ namespace uni.learn.BussinesLogic.Migrations
 
                     b.HasIndex("TemasId");
 
-                    b.ToTable("CursoTemas");
+                    b.ToTable("CursoTema", (string)null);
                 });
 
             modelBuilder.Entity("uni.learn.core.Entities.Temas", b =>

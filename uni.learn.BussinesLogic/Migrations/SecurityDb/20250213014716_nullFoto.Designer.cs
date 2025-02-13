@@ -12,8 +12,8 @@ using uni.learn.BussinesLogic.Context;
 namespace uni.learn.BussinesLogic.Migrations.SecurityDb
 {
     [DbContext(typeof(SecurityDbContext))]
-    [Migration("20250212051901_initialSecurity")]
-    partial class initialSecurity
+    [Migration("20250213014716_nullFoto")]
+    partial class nullFoto
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -189,7 +189,6 @@ namespace uni.learn.BussinesLogic.Migrations.SecurityDb
                         .HasColumnType("bit");
 
                     b.Property<string>("Foto")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("GrupoEstudiantil")
@@ -247,6 +246,10 @@ namespace uni.learn.BussinesLogic.Migrations.SecurityDb
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("Email", "Matricula")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });

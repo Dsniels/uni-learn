@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace uni.learn.BussinesLogic.Migrations.SecurityDb
 {
     /// <inheritdoc />
-    public partial class initialSecurity : Migration
+    public partial class uniqueUser : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -195,6 +195,13 @@ namespace uni.learn.BussinesLogic.Migrations.SecurityDb
                 name: "EmailIndex",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_Email_Matricula",
+                table: "AspNetUsers",
+                columns: new[] { "Email", "Matricula" },
+                unique: true,
+                filter: "[Email] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",

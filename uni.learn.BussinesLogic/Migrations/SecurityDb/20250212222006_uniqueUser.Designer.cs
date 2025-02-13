@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using uni.learn.BussinesLogic.Context;
 
@@ -11,9 +12,11 @@ using uni.learn.BussinesLogic.Context;
 namespace uni.learn.BussinesLogic.Migrations.SecurityDb
 {
     [DbContext(typeof(SecurityDbContext))]
-    partial class SecurityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250212222006_uniqueUser")]
+    partial class uniqueUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -186,6 +189,7 @@ namespace uni.learn.BussinesLogic.Migrations.SecurityDb
                         .HasColumnType("bit");
 
                     b.Property<string>("Foto")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("GrupoEstudiantil")
