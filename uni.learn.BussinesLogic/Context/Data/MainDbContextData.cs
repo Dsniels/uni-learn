@@ -17,27 +17,22 @@ public class MainDbContextData
                 new Temas
                 {
                     Nombre = "Programación",
-                    Cursos = new List<Curso>()
                 },
                 new Temas
                 {
                     Nombre = "Matemáticas",
-                    Cursos = new List<Curso>()
                 },
                 new Temas
                 {
                     Nombre = "Ciencias",
-                    Cursos = new List<Curso>()
                 },
                 new Temas
                 {
                     Nombre = "Idiomas",
-                    Cursos = new List<Curso>()
                 },
                 new Temas
                 {
                     Nombre = "Diseño",
-                    Cursos = new List<Curso>()
                 }
             };
 

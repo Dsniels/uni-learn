@@ -1,6 +1,7 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using uni.learn.core.Entity;
@@ -14,9 +15,9 @@ public class TokenService : ITokenService
     private readonly SymmetricSecurityKey _key;
     private readonly IConfiguration _config;
 
-    public TokenService(SymmetricSecurityKey key,IConfiguration config){
+    public TokenService(IConfiguration config){
         _config = config;
-        _key = key;
+        _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Token:Key"]));
     }
 
 

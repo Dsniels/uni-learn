@@ -17,9 +17,6 @@ public class MainDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<Curso>()
-                    .HasMany(e=>e.Temas)    
-                    .WithMany(e=>e.Cursos);
     }
 
 

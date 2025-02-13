@@ -14,6 +14,9 @@ public class SecurityDbContext : IdentityDbContext<Usuario>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+        builder.Entity<Usuario>()
+                .HasIndex(u => new { u.Email, u.Matricula })
+                .IsUnique();
     }
 
 }

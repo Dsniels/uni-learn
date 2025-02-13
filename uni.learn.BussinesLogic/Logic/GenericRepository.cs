@@ -11,7 +11,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : Base
     private readonly MainDbContext _context;
     public GenericRepository(MainDbContext context)
     {
-        _context = _context;
+        _context = context;
     }
     public async Task<int> Add(T entity)
     {

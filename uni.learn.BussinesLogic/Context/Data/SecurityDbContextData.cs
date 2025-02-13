@@ -31,11 +31,13 @@ public class SecurityDbContextData
             {
                 Nombre = "Admin",
                 ApellidoPaterno = "Sistema",
+                ApellidoMaterno = "Sys",
                 UserName = "admin@unilearn.com",
                 Email = "admin@unilearn.com",
                 EmailConfirmed = true,
                 PhoneNumber = "1234567890",
-                Matricula = 22222
+                Matricula = 22222,
+                Admin = true
             };
 
             var resultado = await userManager.CreateAsync(usuario, "Admin123*");
