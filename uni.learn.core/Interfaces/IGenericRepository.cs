@@ -1,4 +1,5 @@
 using System;
+using uni.learn.core.Entities;
 using uni.learn.core.Entity;
 
 namespace uni.learn.core.Interfaces;
@@ -12,6 +13,6 @@ public interface IGenericRepository<T> where T : Base
     Task<int> Update(T entity);
     Task<int> DeleteEntity(T entity);
 
-    void AddEntity(T entity);
+    Task<int> AddEntity(List<T> entity);
 
 }

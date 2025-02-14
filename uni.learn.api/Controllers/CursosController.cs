@@ -1,5 +1,6 @@
 using System.Security.AccessControl;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -41,13 +42,41 @@ namespace uni.learn.api.Controllers
             return Ok(cursos);
         }
 
+        [HttpGet("GetApprovedCursos")]
+        public async Task<IActionResult> GetApprovedCursos(){
+            var cursos = await _repository.GetApprovedCursos();
+            return Ok(cursos);
+        }
+
+
+        [Authorize]    
+        [HttpGet("GetCursosVistos")]
+        public async Task<IActionResult> GetVistosCursos(){
+            var user = await _userManager.BuscarUsuarioAsync(HttpContext.User);
+            if(user == null){
+                return NotFound("User not found");
+            }
+            var cursos = await _repository.GetCursoVistos(user.Id);
+
+            return Ok(cursos);
+        }
+
+        [HttpGet("GetVotos")]
+        public async Task<IActionResult> GetVotos([FromQuery] int cursoId){
+            var votos = await _repository.GetVotos(cursoId);
+            return Ok(votos);
+        }
+
+
+        
+
 
         [HttpPost("Add")]
         public async Task<ActionResult> AddCurso(CursoDto curso)
         {
             var newCurso = new Curso
             {
-                Author = curso.Author,
+                AuthorId = curso.Author,
                 Titulo = curso.Titulo,
                 Video = curso.Video,
             };
@@ -97,7 +126,7 @@ namespace uni.learn.api.Controllers
             {
                 return NotFound("Curso not found");
             }
-            var author = await _userManager.FindByIdAsync(curso.Author);
+            var author = await _userManager.FindByIdAsync(curso.AuthorId);
             
             var details = _mapper.Map<Curso, CursoDetailDto>(curso);
             details.Author = author;
@@ -121,7 +150,7 @@ namespace uni.learn.api.Controllers
                 return NotFound("Curso not found");
             }
 
-            if (curso.Author != usuario.Id || usuario.Admin)
+            if (curso.AuthorId != usuario.Id || usuario.Admin)
             {
 
                 return Unauthorized();

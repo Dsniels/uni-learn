@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using uni.learn.BussinesLogic.Data;
 using uni.learn.core.Entity;
@@ -19,9 +20,12 @@ public class GenericRepository<T> : IGenericRepository<T> where T : Base
         return await _context.SaveChangesAsync();
     }
 
-    public void AddEntity(T entity)
+    public async Task<int> AddEntity(List<T> entity)
     {
-        _context.Set<T>().Add(entity);
+        _context.Set<T>().AddRange(entity);
+
+        return  await _context.SaveChangesAsync();
+
     }
 
     public Task<int> CountAsync()
