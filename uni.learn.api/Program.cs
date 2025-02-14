@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using uni.learn.api;
+using uni.learn.api.Middleware;
 using uni.learn.BussinesLogic.Context;
 using uni.learn.BussinesLogic.Context.Data;
 using uni.learn.BussinesLogic.Data;
@@ -8,13 +9,33 @@ using uni.learn.core.Entity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenApi();
+builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
+
+
+builder.Services.AddCors(opt =>
+{
+    opt.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowAnyOrigin();
+    });
+});
 builder.Services.AddInfraestructure(builder.Configuration);
 
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "UniLearn API V1");
+    });
+}
 
 using (var scope = app.Services.CreateScope())
 {
@@ -32,17 +53,14 @@ using (var scope = app.Services.CreateScope())
 
 
 
-app.MapOpenApi();
-app.UseCors();
+app.UseHttpsRedirection();
 app.UseRouting();
-// app.UseMiddleware();
+app.UseCors();
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseEndpoints(e =>
-{
-    e.MapControllers();
-});
+app.MapControllers();
 
-app.UseHttpsRedirection();
+
 app.Run();
 
