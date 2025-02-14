@@ -13,10 +13,14 @@ public class MainDbContext : DbContext
 
     public DbSet<Curso> Curso { get; set; }
     public DbSet<Temas> Tema { get; set; }
+    public DbSet<Voto> Voto { get; set; }
+    public DbSet<CursoVisto> CursoVistos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Temas>().HasIndex(t => new { t.Nombre }).IsUnique();
     }
 
 
