@@ -210,43 +210,6 @@ namespace uni.learn.api.Controllers
         }
 
 
-        [Authorize(Roles = "ADMIN")]
-        [HttpPut("account/updateUserInfo/{id}")]
-        public async Task<ActionResult> UpdateUserInfo(string id, RegistroDTO dataset)
-        {
-            var user = await _userManager.FindByIdAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            user.Nombre = dataset.Nombre;
-            user.ApellidoPaterno = dataset.ApellidoPaterno;
-            user.ApellidoMaterno = dataset.ApellidoMaterno;
-
-
-            if (!string.IsNullOrEmpty(dataset.Password))
-            {
-                user.PasswordHash = _passwordHasher.HashPassword(user, dataset.Password);
-            }
-
-            var result = await _userManager.UpdateAsync(user);
-
-            if (!result.Succeeded)
-            {
-                return BadRequest();
-            }
-
-
-            var roles = await _userManager.GetRolesAsync(user);
-            var userDto = _mapper.Map<Usuario, UsuarioDto>(user);
-            userDto.Admin = roles.Contains("ADMIN") ? true : false;
-
-            return Ok(userDto);
-
-        }
-
-
 
         [Authorize]
         [HttpPut("account/updateMyAccount")]
@@ -287,6 +250,43 @@ namespace uni.learn.api.Controllers
 
 
         }
+
+        [Authorize(Roles = "ADMIN")]
+        [HttpPut("account/updateUserInfo/{id}")]
+        public async Task<ActionResult> UpdateUserInfo(string id, RegistroDTO dataset)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.Nombre = dataset.Nombre;
+            user.ApellidoPaterno = dataset.ApellidoPaterno;
+            user.ApellidoMaterno = dataset.ApellidoMaterno;
+
+
+            if (!string.IsNullOrEmpty(dataset.Password))
+            {
+                user.PasswordHash = _passwordHasher.HashPassword(user, dataset.Password);
+            }
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest();
+            }
+
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var userDto = _mapper.Map<Usuario, UsuarioDto>(user);
+            userDto.Admin = roles.Contains("ADMIN") ? true : false;
+
+            return Ok(userDto);
+
+        }
+
 
 
 
