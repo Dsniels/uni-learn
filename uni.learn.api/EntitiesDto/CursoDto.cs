@@ -8,6 +8,7 @@ public class CursoDto
     public string Author { get; set; }
     public List<TemaDto> Temas { get; set; }
     public string Video { get; set; }
+    public string Descripcion {get;set;}
 
 
 }

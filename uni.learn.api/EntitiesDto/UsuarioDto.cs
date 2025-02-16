@@ -11,5 +11,5 @@ public class UsuarioDto
     public string Email { get; set; }
     public string Imagen { get; set; }
     public int Matricula {get; set;}
-    public bool Admin { get; set; }
+    // public bool Admin { get; set; }
 }

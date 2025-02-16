@@ -5,7 +5,7 @@ namespace uni.learn.api.EntitiesDto;
 
 public class CursoDetailDto : Curso
 {
-    public Usuario Author {get; set;}
+    public UsuarioDto Author {get; set;}
     
 
 }
