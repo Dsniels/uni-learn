@@ -148,8 +148,7 @@ namespace uni.learn.api.Controllers
             }
             var roles = await _userManager.GetRolesAsync(user);
             var result = _mapper.Map<Usuario, UsuarioDto>(user);
-            result.Admin = roles.Contains("ADMIN") ? true : false;
-            return Ok(result);
+            return Ok(new { result, Admin = roles.Contains("ADMIN") });
         }
 
 
@@ -188,9 +187,8 @@ namespace uni.learn.api.Controllers
 
             var roles = await _userManager.GetRolesAsync(user);
             var userDto = _mapper.Map<Usuario, UsuarioDto>(user);
-            userDto.Admin = roles.Contains("ADMIN") ? true : false;
 
-            return Ok(userDto);
+            return Ok(new {userDto, Admin = roles.Contains("ADMIN")});
 
 
         }
@@ -198,7 +196,7 @@ namespace uni.learn.api.Controllers
 
 
 
-    
+
 
         [Authorize(Roles = "ADMIN")]
         [HttpPut("account/updateUserInfo/{id}")]
@@ -230,9 +228,8 @@ namespace uni.learn.api.Controllers
 
             var roles = await _userManager.GetRolesAsync(user);
             var userDto = _mapper.Map<Usuario, UsuarioDto>(user);
-            userDto.Admin = roles.Contains("ADMIN") ? true : false;
 
-            return Ok(userDto);
+            return Ok(new {userDto, Admin = roles.Contains("ADMIN")});
 
         }
 

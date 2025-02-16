@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using uni.learn.api.EntitiesDto;
@@ -21,9 +22,9 @@ namespace uni.learn.api.Controllers
         private readonly IMapper _mapper;
 
         public CursosController(
-            IMapper mapper, 
-            UserManager<Usuario> userManager, 
-            IGenericRepository<Temas> temasRepository, 
+            IMapper mapper,
+            UserManager<Usuario> userManager,
+            IGenericRepository<Temas> temasRepository,
             IGenericRepository<Curso> repository,
             ICursoRepository cursoRepository
             )
@@ -51,6 +52,7 @@ namespace uni.learn.api.Controllers
         {
             var spec = new CursoSpecifications(cursosParams);
             var cursos = await _cursosRepository.GetApprovedCursos(spec);
+            //var cursosList = _mapper.Map<IReadOnlyCollection<Curso>, IReadOnlyCollection<CursoDto>>(cursos);
             return Ok(cursos);
         }
 
@@ -98,6 +100,7 @@ namespace uni.learn.api.Controllers
                 AuthorId = curso.Author,
                 Titulo = curso.Titulo,
                 Video = curso.Video,
+                Descripcion = curso.Descripcion
             };
 
             var temas = new List<Temas>();
@@ -122,20 +125,44 @@ namespace uni.learn.api.Controllers
         }
 
 
-
         [HttpPost("UpdateCurso/{id}")]
-        public async Task<ActionResult> UpdateCurso(int id, Curso curso)
+        public async Task<ActionResult> UpdateCurso(int id, Curso cursoUpdate)
         {
-            curso.Id = id;
-            var result = await _genericRepository.Update(curso);
+            var user = await _userManager.BuscarUsuarioAsync(HttpContext.User);
+            if (user == null)
+            {
+                return NotFound("Usuario no encontrado");
+            }
+
+            var cursoOriginal = await _genericRepository.GetByID(id);
+            if (cursoOriginal == null)
+            {
+                return NotFound("Curso no encontrado");
+            }
+
+            if (cursoUpdate.Aprobado != cursoOriginal.Aprobado && !user.Admin)
+            {
+                return Unauthorized("Solo un admin puede modificar la propiedad 'aprobado'");
+            }
+
+            cursoOriginal.Titulo = cursoUpdate.Titulo;
+            cursoOriginal.Video = cursoUpdate.Video;
+            cursoOriginal.Descripcion = cursoUpdate.Descripcion;
+            if (user.Admin)
+            {
+                cursoOriginal.Aprobado = cursoUpdate.Aprobado;
+            }
+
+            var result = await _genericRepository.Update(cursoOriginal);
             if (result == 0)
             {
                 return BadRequest();
             }
 
-
-            return Ok(curso);
+            return Ok(cursoOriginal);
         }
+
+
 
 
 
@@ -149,9 +176,10 @@ namespace uni.learn.api.Controllers
                 return NotFound("Curso not found");
             }
             var author = await _userManager.FindByIdAsync(curso.AuthorId);
+            var authorDto = _mapper.Map<Usuario, UsuarioDto>(author);
 
             var details = _mapper.Map<Curso, CursoDetailDto>(curso);
-            details.Author = author;
+            details.Author = authorDto;
             return Ok(details);
 
         }

@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using uni.learn.api.EntitiesDto;
@@ -6,24 +7,27 @@ using uni.learn.core.Interfaces;
 
 namespace uni.learn.api.Controllers
 {
-    public class AuthController : ControllerBase
+    public class AuthController : BaseController
     {
-        public readonly UserManager<Usuario> _userManager;
-        public readonly SignInManager<Usuario> _signInManager;
-        public readonly ITokenService _tokenService;
-        public readonly RoleManager<Usuario> _roleManager;
-        public readonly IPasswordHasher<Usuario> _passwordHasher;
+        private readonly UserManager<Usuario> _userManager;
+        private readonly IMapper _mapper;
+        private readonly SignInManager<Usuario> _signInManager;
+        private readonly ITokenService _tokenService;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IPasswordHasher<Usuario> _passwordHasher;
 
 
 
         public AuthController(
+            IMapper mapper,
             UserManager<Usuario> userManager,
             SignInManager<Usuario> signInManager,
             ITokenService tokenService,
-            RoleManager<Usuario> roleManager,
+            RoleManager<IdentityRole> roleManager,
             IPasswordHasher<Usuario> passwordHasher
         )
         {
+            _mapper = mapper;
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
@@ -56,15 +60,11 @@ namespace uni.learn.api.Controllers
             var roles = await _userManager.GetRolesAsync(user);
 
 
+            var newUser = _mapper.Map<Usuario, UsuarioDto>(user);
             return Ok(new
             {
-                usuario = new UsuarioDto
-                {
-                    Nombre = user.Nombre,
-                    ApellidoPaterno = user.ApellidoPaterno,
-                    Email = user.Email,
-                    Admin = roles.Contains("ADMIN")
-                },
+                usuario = newUser,
+                Admin = roles.Contains("ADMIN"),
                 token = _tokenService.CreateToken(user, roles)
             });
 
@@ -80,6 +80,7 @@ namespace uni.learn.api.Controllers
             {
                 Nombre = registro.Nombre,
                 ApellidoPaterno = registro.ApellidoPaterno,
+                Matricula = registro.Matricula,
                 ApellidoMaterno = registro.ApellidoMaterno,
                 Email = registro.Email,
                 UserName = registro.UserName
@@ -92,18 +93,14 @@ namespace uni.learn.api.Controllers
                 return BadRequest(result.Errors.ToList());
             }
 
-
+            var newUser = _mapper.Map<Usuario, UsuarioDto>(user);
             return Ok(new
             {
-                usuario = new UsuarioDto
-                {
-                    Nombre = user.Nombre,
-                    ApellidoPaterno = user.ApellidoPaterno,
-                    Email = user.Email,
-                    Admin = false
-                },
-                token = _tokenService.CreateToken(user,null)
+                usuario = newUser,
+                Admin = false,
+                token = _tokenService.CreateToken(user, null)
             });
+
         }
 
 

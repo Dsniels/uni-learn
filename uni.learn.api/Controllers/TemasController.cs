@@ -6,7 +6,7 @@ using uni.learn.core.Interfaces;
 
 namespace uni.learn.api.Controllers
 {
-    public class TemasController : ControllerBase
+    public class TemasController : BaseController
     {
         private readonly IGenericRepository<Temas> _temasRepository;
 
@@ -43,7 +43,7 @@ namespace uni.learn.api.Controllers
             var result = await _temasRepository.GetAllAsync();
             return Ok(result);
         }
-        
+
 
 
 
@@ -62,7 +62,7 @@ namespace uni.learn.api.Controllers
         }
 
 
-        [Authorize(Roles= "ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         [HttpDelete("DeleteByID/{id}")]
         public async Task<IActionResult> DeleteByID(int id)
         {
