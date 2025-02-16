@@ -55,5 +55,13 @@ public class CursoRepository : ICursoRepository
         return (likes, dislikes);
     }
 
+    public async Task<IReadOnlyCollection<Curso>> GetUnApprovedCursos(){
+        return await _context.Curso.Where(c => c.Aprobado == false).ToListAsync();
+
+    }
+
+
+    
+
 
 }

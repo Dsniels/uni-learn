@@ -12,6 +12,6 @@ public interface ICursoRepository
     Task<(int likes, int dislikes)> GetVotos(int id);
     Task<int> AddVoto(Voto voto);
     Task<IReadOnlyList<CursoVisto>> GetCursoVistos(string userID);
-
+    Task<IReadOnlyCollection<Curso>> GetUnApprovedCursos();
 
 }
