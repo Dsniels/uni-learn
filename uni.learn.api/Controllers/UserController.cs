@@ -1,12 +1,9 @@
-using System.Security.Cryptography.X509Certificates;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using uni.learn.api.EntitiesDto;
 using uni.learn.api.Extensions;
-using uni.learn.BussinesLogic.Logic;
 using uni.learn.core.Entity;
 using uni.learn.core.Interfaces;
 
@@ -137,6 +134,8 @@ namespace uni.learn.api.Controllers
         }
 
 
+
+
         [Authorize]
         [HttpGet("me")]
         public async Task<ActionResult> GetMyProfile()
@@ -152,6 +151,9 @@ namespace uni.learn.api.Controllers
             result.Admin = roles.Contains("ADMIN") ? true : false;
             return Ok(result);
         }
+
+
+
 
 
         [Authorize]
@@ -191,8 +193,12 @@ namespace uni.learn.api.Controllers
             return Ok(userDto);
 
 
-
         }
+
+
+
+
+    
 
         [Authorize(Roles = "ADMIN")]
         [HttpPut("account/updateUserInfo/{id}")]

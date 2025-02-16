@@ -1,16 +1,13 @@
-using System.Security.AccessControl;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.VisualBasic;
 using uni.learn.api.EntitiesDto;
 using uni.learn.api.Extensions;
 using uni.learn.core.Entities;
 using uni.learn.core.Entity;
 using uni.learn.core.Interfaces;
+using uni.learn.core.Specifications;
 
 namespace uni.learn.api.Controllers
 {
@@ -41,17 +38,19 @@ namespace uni.learn.api.Controllers
 
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAllCursos()
+        public async Task<IActionResult> GetAllCursos([FromQuery] CursoSpecificationParams cursosParams)
         {
-            var cursos = await _cursosRepository.GetAll();
+            var spec = new CursoSpecifications(cursosParams);
+            var cursos = await _cursosRepository.GetAll(spec);
 
             return Ok(cursos);
         }
 
         [HttpGet("GetApprovedCursos")]
-        public async Task<IActionResult> GetApprovedCursos()
+        public async Task<IActionResult> GetApprovedCursos([FromQuery] CursoSpecificationParams cursosParams)
         {
-            var cursos = await _cursosRepository.GetApprovedCursos();
+            var spec = new CursoSpecifications(cursosParams);
+            var cursos = await _cursosRepository.GetApprovedCursos(spec);
             return Ok(cursos);
         }
 
@@ -63,10 +62,6 @@ namespace uni.learn.api.Controllers
             return Ok(cursos);
 
         }
-
-
-
-
 
         [Authorize]
         [HttpGet("GetCursosVistos")]
@@ -179,18 +174,11 @@ namespace uni.learn.api.Controllers
 
             if (curso.AuthorId != usuario.Id || usuario.Admin)
             {
-
                 return Unauthorized();
-
             }
 
-
             var result = await _genericRepository.DeleteEntity(curso);
-
-
             return Ok(result);
-
-
 
         }
 
