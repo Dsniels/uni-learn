@@ -1,9 +1,11 @@
 using System;
 using Microsoft.EntityFrameworkCore;
+using uni.learn.BussinesLogic.Context.Data;
 using uni.learn.BussinesLogic.Data;
 using uni.learn.core.Entities;
 using uni.learn.core.Entity;
 using uni.learn.core.Interfaces;
+using uni.learn.core.Specifications;
 
 namespace uni.learn.BussinesLogic.Logic;
 
@@ -22,16 +24,20 @@ public class CursoRepository : ICursoRepository
 
     }
 
-    public async Task<IReadOnlyCollection<Curso>> GetAll()
+
+    private IQueryable<Curso> ApplySpecifications(ISpecification<Curso> spec)
     {
-        return await _context.Curso.Include(c => c.Temas).ToListAsync();
+        return SpecificationEvaluator<Curso>.GetQuery(_context.Curso.AsQueryable(), spec);
     }
 
-    public async Task<IReadOnlyCollection<Curso>> GetApprovedCursos()
+    public async Task<IReadOnlyCollection<Curso>> GetAll(ISpecification<Curso> spec)
     {
-        return await _context.Curso.Include(t => t.Temas)
-                                    .Where(c => c.Aprobado == true)
-                                    .ToListAsync();
+        return await ApplySpecifications(spec).ToListAsync();
+    }
+
+    public async Task<IReadOnlyCollection<Curso>> GetApprovedCursos(ISpecification<Curso> spec)
+    {
+        return await ApplySpecifications(spec).Where(C => C.Aprobado == true).ToListAsync();
     }
 
     public async Task<Curso> GetByID(int id)
@@ -39,6 +45,11 @@ public class CursoRepository : ICursoRepository
         return await _context.Curso.Include(t => t.Temas)
                                     .FirstOrDefaultAsync(c => c.Id == id);
 
+    }
+
+    public async Task<int> CountAsync(ISpecification<Curso> spec)
+    {
+        return await ApplySpecifications(spec).CountAsync();
     }
 
     public async Task<IReadOnlyList<CursoVisto>> GetCursoVistos(string userID)
@@ -55,13 +66,14 @@ public class CursoRepository : ICursoRepository
         return (likes, dislikes);
     }
 
-    public async Task<IReadOnlyCollection<Curso>> GetUnApprovedCursos(){
+    public async Task<IReadOnlyCollection<Curso>> GetUnApprovedCursos()
+    {
         return await _context.Curso.Where(c => c.Aprobado == false).ToListAsync();
 
     }
 
 
-    
+
 
 
 }

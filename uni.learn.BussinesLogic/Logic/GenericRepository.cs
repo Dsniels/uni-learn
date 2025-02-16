@@ -1,9 +1,11 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using uni.learn.BussinesLogic.Context.Data;
 using uni.learn.BussinesLogic.Data;
 using uni.learn.core.Entity;
 using uni.learn.core.Interfaces;
+using uni.learn.core.Specifications;
 
 namespace uni.learn.BussinesLogic.Logic;
 
@@ -44,7 +46,18 @@ public class GenericRepository<T> : IGenericRepository<T> where T : Base
     public async Task<IReadOnlyCollection<T>> GetAllAsync()
     {
         return await _context.Set<T>().ToListAsync();
+        
+    }
 
+    public async Task<IReadOnlyCollection<T>> GetAllWithSpec(ISpecification<T> spec)
+    {
+      return await ApplySpecification(spec).ToListAsync(); 
+    }
+
+
+
+    private IQueryable<T> ApplySpecification(ISpecification<T> spec){
+        return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);
     }
 
     public async Task<T> GetByID(int id)

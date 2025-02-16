@@ -1,14 +1,15 @@
 using System;
 using uni.learn.core.Entities;
 using uni.learn.core.Entity;
+using uni.learn.core.Specifications;
 
 namespace uni.learn.core.Interfaces;
 
 public interface ICursoRepository
 {
-    Task<IReadOnlyCollection<Curso>> GetAll();
+    Task<IReadOnlyCollection<Curso>> GetAll(ISpecification<Curso> spec);
     Task<Curso> GetByID(int id);
-    Task<IReadOnlyCollection<Curso>> GetApprovedCursos();
+    Task<IReadOnlyCollection<Curso>> GetApprovedCursos(ISpecification<Curso> spec);
     Task<(int likes, int dislikes)> GetVotos(int id);
     Task<int> AddVoto(Voto voto);
     Task<IReadOnlyList<CursoVisto>> GetCursoVistos(string userID);
