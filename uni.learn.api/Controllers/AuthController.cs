@@ -53,7 +53,7 @@ namespace uni.learn.api.Controllers
 
             if (!result.Succeeded)
             {
-                return Unauthorized(result);
+                return Unauthorized("Password or Email are incorrect");
             }
 
 
@@ -61,11 +61,11 @@ namespace uni.learn.api.Controllers
 
 
             var newUser = _mapper.Map<Usuario, UsuarioDto>(user);
-            return Ok(new
+            return Ok(new LoginResponse
             {
-                usuario = newUser,
+                Usuario = newUser,
                 Admin = roles.Contains("ADMIN"),
-                token = _tokenService.CreateToken(user, roles)
+                Token = _tokenService.CreateToken(user, roles)
             });
 
         }
@@ -94,11 +94,11 @@ namespace uni.learn.api.Controllers
             }
 
             var newUser = _mapper.Map<Usuario, UsuarioDto>(user);
-            return Ok(new
+            return Ok(new LoginResponse
             {
-                usuario = newUser,
+                Usuario = newUser,
                 Admin = false,
-                token = _tokenService.CreateToken(user, null)
+                Token = _tokenService.CreateToken(user, null)
             });
 
         }
