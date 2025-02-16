@@ -17,7 +17,6 @@ namespace uni.learn.api.Controllers
     {
 
         private readonly UserManager<Usuario> _userManager;
-        private readonly SignInManager<Usuario> _signInManager;
         private readonly IPasswordHasher<Usuario> _passwordHasher;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IGenericSecurityRepository<Usuario> _userRepository;
@@ -30,7 +29,6 @@ namespace uni.learn.api.Controllers
             IPasswordHasher<Usuario> passwordHasher,
             UserManager<Usuario> userManager,
             IGenericSecurityRepository<Usuario> userRepository,
-            SignInManager<Usuario> signInManager,
             RoleManager<IdentityRole> roleManager,
             ITokenService tokenService)
         {
@@ -38,66 +36,12 @@ namespace uni.learn.api.Controllers
             _passwordHasher = passwordHasher;
             _mapper = mapper;
             _roleManager = roleManager;
-            _signInManager = signInManager;
             _tokenService = tokenService;
             _userManager = userManager;
         }
 
 
 
-        [HttpPost("Login")]
-        public async Task<ActionResult> Login(LoginDto login)
-        {
-
-            var user = await _userManager.FindByEmailAsync(login.Email);
-            if (user == null)
-            {
-                return NotFound("User Not found");
-            }
-
-            var result = await _signInManager.CheckPasswordSignInAsync(user, login.Password, true);
-            if (!result.Succeeded)
-            {
-                return Unauthorized(result.IsNotAllowed);
-            }
-
-
-            var roles = await _userManager.GetRolesAsync(user);
-
-
-
-            return Ok(new
-            {
-                Token = _tokenService.CreateToken(user, roles)
-            });
-        }
-
-
-        [HttpPost("SignUp")]
-        public async Task<ActionResult> SignUp(RegistroDTO registro)
-        {
-            var usuario = new Usuario
-            {
-                Nombre = registro.Nombre,
-                ApellidoPaterno = registro.ApellidoPaterno,
-                ApellidoMaterno = registro.ApellidoMaterno,
-                Email = registro.Email,
-                UserName = registro.UserName
-            };
-
-
-            var result = await _userManager.CreateAsync(usuario, registro.Password);
-            if (!result.Succeeded)
-            {
-                return BadRequest(result.Errors.ToList());
-            }
-
-
-            return Ok(new
-            {
-                token = _tokenService.CreateToken(usuario, null)
-            });
-        }
 
 
         [Authorize]
@@ -208,7 +152,6 @@ namespace uni.learn.api.Controllers
             result.Admin = roles.Contains("ADMIN") ? true : false;
             return Ok(result);
         }
-
 
 
         [Authorize]
