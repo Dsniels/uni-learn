@@ -1,4 +1,4 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -7,6 +7,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uni.learn.BussinesLogic", "uni.learn.BussinesLogic\uni.learn.BussinesLogic.csproj", "{12C22B95-08E8-35B0-27C2-BB9ECA1C4262}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uni.learn.core", "uni.learn.core\uni.learn.core.csproj", "{8CD9F261-507B-A305-9BC8-5CF1CA42C80B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uni.learn.tests", "uni.learn.tests\uni.learn.tests.csproj", "{62B059B2-4509-41F0-97EA-12A368804C11}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +28,10 @@ Global
 		{8CD9F261-507B-A305-9BC8-5CF1CA42C80B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CD9F261-507B-A305-9BC8-5CF1CA42C80B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CD9F261-507B-A305-9BC8-5CF1CA42C80B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62B059B2-4509-41F0-97EA-12A368804C11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62B059B2-4509-41F0-97EA-12A368804C11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62B059B2-4509-41F0-97EA-12A368804C11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62B059B2-4509-41F0-97EA-12A368804C11}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
