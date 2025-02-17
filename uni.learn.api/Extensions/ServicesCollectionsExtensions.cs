@@ -22,8 +22,8 @@ public static class ServicesCollectionsExtensions
     public static void AddInfraestructure(this IServiceCollection services, IConfiguration configuration)
     {
 
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
-        var IdentityConnectionString = configuration.GetConnectionString("SecurityConnection");
+        var connectionString = configuration.GetConnectionString("DefaultConnectionLocal");
+        var IdentityConnectionString = configuration.GetConnectionString("SecurityConnectionlocal");
         var IssuerString = configuration["Token:Key"];
 
 
@@ -44,8 +44,6 @@ public static class ServicesCollectionsExtensions
         builder.Services.AddControllers()
             .AddJsonOptions(options =>
             {
-            //    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-                // O si prefieres ignorar los ciclos:
              options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
             });
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

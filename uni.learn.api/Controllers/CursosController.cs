@@ -37,7 +37,7 @@ namespace uni.learn.api.Controllers
         }
 
 
-
+        [Authorize(Roles = "ADMIN")]
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllCursos([FromQuery] CursoSpecificationParams cursosParams)
         {
@@ -57,6 +57,7 @@ namespace uni.learn.api.Controllers
         }
 
 
+        [Authorize(Roles="ADMIN")]
         [HttpGet("GetUnApprovedCursos")]
         public async Task<IActionResult> GetUnApprovedCursos()
         {
@@ -200,7 +201,9 @@ namespace uni.learn.api.Controllers
                 return NotFound("Curso not found");
             }
 
-            if (curso.AuthorId != usuario.Id || usuario.Admin)
+            var roles = await _userManager.GetRolesAsync(usuario);
+
+            if (curso.AuthorId != usuario.Id || roles.Contains("ADMIN") ? false: true)
             {
                 return Unauthorized();
             }
