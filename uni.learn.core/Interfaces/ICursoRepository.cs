@@ -9,8 +9,6 @@ public interface ICursoRepository
 {
     Task<Curso> GetByID(int id);
     Task<IReadOnlyCollection<Curso>> GetApprovedCursos(ISpecification<Curso> spec);
-    Task<(int likes, int dislikes)> GetVotos(int id);
-    Task<int> AddVoto(Voto voto);
     Task<IReadOnlyList<CursoVisto>> GetCursoVistos(string userID);
     Task<IReadOnlyCollection<Curso>> GetUnApprovedCursos();
 

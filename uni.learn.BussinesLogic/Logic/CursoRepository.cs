@@ -54,12 +54,6 @@ public class CursoRepository : ICursoRepository
                                         .ToListAsync();
     }
 
-    public async Task<(int likes, int dislikes)> GetVotos(int id)
-    {
-        int likes = await _context.Voto.CountAsync(v => v.CursoId == id && v.Like == true);
-        int dislikes = await _context.Voto.CountAsync(v => v.CursoId == id && v.Like == false);
-        return (likes, dislikes);
-    }
 
     public async Task<IReadOnlyCollection<Curso>> GetUnApprovedCursos()
     {

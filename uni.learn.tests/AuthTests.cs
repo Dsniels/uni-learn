@@ -7,6 +7,7 @@ using uni.learn.core.Entity;
 using uni.learn.core.Specifications;
 namespace uni.learn.tests;
 
+[Collection("Tests")]
 public class AuthTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _factory;
@@ -36,6 +37,9 @@ public class AuthTests : IClassFixture<WebApplicationFactory<Program>>
 
 
     }
+
+
+    
     [Fact]
     public async Task Login_ReturnPasswordOrEmailIncorrect()
     {
