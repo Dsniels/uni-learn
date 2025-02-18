@@ -14,7 +14,6 @@ public class VotosTests : IClassFixture<WebApplicationFactory<Program>>
     private readonly HttpClient _client;
     private readonly HttpClient _clientNoAuth;
     private readonly HttpClient _clientAdmin;
-    private int CursoID;
 
     public VotosTests(WebApplicationFactory<Program> factory)
     {
@@ -32,5 +31,51 @@ public class VotosTests : IClassFixture<WebApplicationFactory<Program>>
         response.EnsureSuccessStatusCode();
 
     }
+
+
+
+    [Fact]
+    public async Task LikeCurso_ShouldReturnOkAndCreate(){
+        var response = await _client.PostAsync("/api/Votos/likeCurso?cursoId=5", null);
+
+        response.EnsureSuccessStatusCode();
+
+        
+
+    }
+
+
+    [Fact]
+    public async Task LikeCurso_ShouldReturnOk(){
+        var response = await _client.PostAsync("/api/Votos/likeCurso?cursoId=5", null);
+
+        response.EnsureSuccessStatusCode();
+
+        
+
+    }
+    [Fact]
+    public async Task UserLikeCurso_ShouldReturnTrue(){
+
+        var response = await _client.GetAsync("/api/Votos/UserLikedCurso?cursoId=5");
+        response.EnsureSuccessStatusCode();
+
+        var like = await response.Content.ReadFromJsonAsync<bool>();
+
+        Assert.True(like);
+
+    }
+
+
+    [Fact]
+    public async Task DisLikeCurso_ShouldReturnOk(){
+        var response = await _client.PostAsync("/api/Votos/DisLikeCurso?cursoId=5", null);
+
+        response.EnsureSuccessStatusCode();
+
+        
+
+    }
+
 
 }

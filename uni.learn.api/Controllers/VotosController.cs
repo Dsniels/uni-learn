@@ -47,10 +47,7 @@ namespace uni.learn.api.Controllers
         public async Task<IActionResult> UserLikedCurso([FromQuery] int cursoId)
         {
             var user = await _userManager.BuscarUsuarioAsync(HttpContext.User);
-            if (user == null)
-            {
-                return Unauthorized();
-            }
+
 
             var result = await _votosRepostory.UserLikeCurso(user.Id, cursoId);
 
@@ -63,10 +60,6 @@ namespace uni.learn.api.Controllers
         public async Task<IActionResult> LikeCurso([FromQuery] int cursoId)
         {
             var user = await _userManager.BuscarUsuarioAsync(HttpContext.User);
-            if (user == null)
-            {
-                return Unauthorized();
-            }
 
             var currVoto = await _votosRepostory.GetVotoAsync(user.Id, cursoId);
 
@@ -79,6 +72,7 @@ namespace uni.learn.api.Controllers
                 CursoId = cursoId,
                 UsuarioId = user.Id,
                 Like = true,
+                Usuario = user,
                 FechaVoto = DateTime.UtcNow
             };
             await _genericRepository.Add(newVoto);
@@ -92,10 +86,6 @@ namespace uni.learn.api.Controllers
         [HttpPost("DisLikeCurso")]
         public async Task<IActionResult> DisLikeVideo([FromQuery] int cursoId){
             var user = await _userManager.BuscarUsuarioAsync(HttpContext.User);
-            if (user == null)
-            {
-                return Unauthorized();
-            }
 
             var currVoto = await _votosRepostory.GetVotoAsync(user.Id, cursoId);
 
@@ -113,43 +103,6 @@ namespace uni.learn.api.Controllers
             return Ok();
         }
 
-
-        [Authorize]
-        [HttpPost("UpdateVoto")]
-        public async Task<IActionResult> UpdateVoto(UpdateVotoDto voto)
-        {
-
-            var user = await _userManager.BuscarUsuarioAsync(HttpContext.User);
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-
-            var currVoto = await _votosRepostory.GetVotoAsync(user.Id, voto.CursoId);
-
-            if (currVoto != null)
-            {
-                currVoto.Like = voto.like;
-                currVoto.FechaVoto = DateTime.UtcNow;
-                await _genericRepository.Update(currVoto);
-            }
-            else
-            {
-                var newVoto = new Voto
-                {
-                    CursoId = voto.CursoId,
-                    UsuarioId = user.Id,
-                    Like = voto.like,
-                    FechaVoto = DateTime.UtcNow
-                };
-                await _genericRepository.Add(newVoto);
-            }
-
-
-            return Ok();
-
-
-        }
 
 
     }

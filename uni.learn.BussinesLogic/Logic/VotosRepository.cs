@@ -26,7 +26,7 @@ public class VotosRepository : IVotosRepostory
 
     public async Task<bool> UserLikeCurso(string userId, int cursoId)
     {
-        var res = await _context.Voto.FirstAsync(v => v.CursoId == cursoId && v.UsuarioId == userId);
+        var res = await _context.Voto.FirstOrDefaultAsync(v => v.CursoId == cursoId && v.UsuarioId == userId);
         return res != null ? true : false;
     }
 
