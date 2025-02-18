@@ -1,7 +1,9 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using uni.learn.api.EntitiesDto;
+using uni.learn.api.Extensions;
 using uni.learn.core.Entity;
 using uni.learn.core.Interfaces;
 
@@ -100,6 +102,27 @@ namespace uni.learn.api.Controllers
                 Admin = false,
                 Token = _tokenService.CreateToken(user, null)
             });
+
+        }
+
+
+
+
+        [Authorize]
+        [HttpDelete("DeleteMyAccount")]
+        public async Task<ActionResult> DeleteMyAccount()
+        {
+            var user = await _userManager.BuscarUsuarioAsync(HttpContext.User);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var result = await _userManager.DeleteAsync(user);
+            if (result == null)
+            {
+                return BadRequest();
+            }
+            return Ok();
 
         }
 

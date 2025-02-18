@@ -4,7 +4,6 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
@@ -32,6 +31,7 @@ public static class ServicesCollectionsExtensions
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped(typeof(IGenericSecurityRepository<>), typeof(GenericSecurityRepository<>));
         services.AddScoped<ITokenService, TokenService>();
+        services.AddTransient<IVotosRepostory, VotosRepository>();
         services.AddAutoMapper(typeof(MappingProfiles));
         services.TryAddSingleton<ISystemClock, SystemClock>();
         services.AddTransient<ICursoRepository, CursoRepository>();

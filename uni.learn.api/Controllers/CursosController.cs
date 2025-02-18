@@ -80,16 +80,6 @@ namespace uni.learn.api.Controllers
 
 
 
-        [HttpGet("GetVotos")]
-        public async Task<IActionResult> GetVotos([FromQuery] int cursoId)
-        {
-            var votos = await _cursosRepository.GetVotos(cursoId);
-            return Ok(votos);
-        }
-
-
-
-
         [HttpPost("Add")]
         public async Task<ActionResult> AddCurso(CursoDto curso)
         {
