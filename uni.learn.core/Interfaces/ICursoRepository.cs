@@ -7,7 +7,6 @@ namespace uni.learn.core.Interfaces;
 
 public interface ICursoRepository
 {
-    Task<IReadOnlyCollection<Curso>> GetAll(ISpecification<Curso> spec);
     Task<Curso> GetByID(int id);
     Task<IReadOnlyCollection<Curso>> GetApprovedCursos(ISpecification<Curso> spec);
     Task<(int likes, int dislikes)> GetVotos(int id);

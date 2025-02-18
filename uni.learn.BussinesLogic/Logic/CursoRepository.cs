@@ -30,11 +30,6 @@ public class CursoRepository : ICursoRepository
         return SpecificationEvaluator<Curso>.GetQuery(_context.Curso.AsQueryable(), spec);
     }
 
-    public async Task<IReadOnlyCollection<Curso>> GetAll(ISpecification<Curso> spec)
-    {
-        return await ApplySpecifications(spec).ToListAsync();
-    }
-
     public async Task<IReadOnlyCollection<Curso>> GetApprovedCursos(ISpecification<Curso> spec)
     {
         return await ApplySpecifications(spec).Where(C => C.Aprobado == true).ToListAsync();

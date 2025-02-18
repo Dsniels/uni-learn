@@ -42,7 +42,7 @@ namespace uni.learn.api.Controllers
         public async Task<IActionResult> GetAllCursos([FromQuery] CursoSpecificationParams cursosParams)
         {
             var spec = new CursoSpecifications(cursosParams);
-            var cursos = await _cursosRepository.GetAll(spec);
+            var cursos = await _genericRepository.GetAllWithSpec(spec);
 
             return Ok(cursos);
         }
@@ -71,10 +71,7 @@ namespace uni.learn.api.Controllers
         public async Task<IActionResult> GetVistosCursos()
         {
             var user = await _userManager.BuscarUsuarioAsync(HttpContext.User);
-            if (user == null)
-            {
-                return NotFound("User not found");
-            }
+
             var cursos = await _cursosRepository.GetCursoVistos(user.Id);
 
             return Ok(cursos);
@@ -117,33 +114,26 @@ namespace uni.learn.api.Controllers
             newCurso.Temas = temas;
             var result = await _genericRepository.Add(newCurso);
 
-            if (result == 0)
-            {
-                return BadRequest();
-            }
-
             return Ok(newCurso);
         }
 
 
+        [Authorize]
         [HttpPost("UpdateCurso/{id}")]
         public async Task<ActionResult> UpdateCurso(int id, Curso cursoUpdate)
         {
             var user = await _userManager.BuscarUsuarioAsync(HttpContext.User);
-            if (user == null)
-            {
-                return NotFound("Usuario no encontrado");
-            }
+ 
 
             var cursoOriginal = await _genericRepository.GetByID(id);
             if (cursoOriginal == null)
             {
-                return NotFound("Curso no encontrado");
+                return NotFound("Curso not Found");
             }
 
             if (cursoUpdate.Aprobado != cursoOriginal.Aprobado && !user.Admin)
             {
-                return Unauthorized("Solo un admin puede modificar la propiedad 'aprobado'");
+                return Unauthorized("Only an admin can approve this video");
             }
 
             cursoOriginal.Titulo = cursoUpdate.Titulo;
@@ -185,15 +175,12 @@ namespace uni.learn.api.Controllers
 
         }
 
-
+        [Authorize]
         [HttpDelete("DeleteByID/{id}")]
         public async Task<IActionResult> DeleteByID(int id)
         {
             var usuario = await _userManager.BuscarUsuarioAsync(HttpContext.User);
-            if (usuario == null)
-            {
-                return NotFound("Usuario not found");
-            }
+      
 
             var curso = await _genericRepository.GetByID(id);
             if (curso == null)

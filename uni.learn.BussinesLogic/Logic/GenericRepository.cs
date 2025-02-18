@@ -22,14 +22,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : Base
         return await _context.SaveChangesAsync();
     }
 
-    public async Task<int> AddEntity(List<T> entity)
-    {
-        _context.Set<T>().AddRange(entity);
-
-        return  await _context.SaveChangesAsync();
-
-    }
-
+    
     public Task<int> CountAsync()
     {
         throw new NotImplementedException();

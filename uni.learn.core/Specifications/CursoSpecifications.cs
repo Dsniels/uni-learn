@@ -14,6 +14,7 @@ public class CursoSpecifications : BaseSpecification<Curso>
     {
 
         AddInclude(x => x.Temas);
+        AddOrderBy(x=>x.Vistas);
         ApplyPaging(cursoParams.PageSize * (cursoParams.PageIndex - 1), cursoParams.PageSize);
 
 
