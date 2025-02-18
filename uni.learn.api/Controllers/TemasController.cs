@@ -29,7 +29,7 @@ namespace uni.learn.api.Controllers
 
             if (result == 0)
             {
-                return BadRequest("Tema already exists");
+                return Conflict("Tema already exists");
             }
 
             return Ok(tema);
@@ -37,7 +37,7 @@ namespace uni.learn.api.Controllers
 
 
 
-        [HttpPost("GetAll")]
+        [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllTemas()
         {
             var result = await _temasRepository.GetAllAsync();
