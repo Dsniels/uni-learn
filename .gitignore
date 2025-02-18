@@ -4,3 +4,4 @@ appsettings.Development.json
 **/bin/Release/**/appsettings.json
 bin/
 obj/
+.vscode/
