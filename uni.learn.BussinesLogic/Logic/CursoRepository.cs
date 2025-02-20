@@ -17,13 +17,6 @@ public class CursoRepository : ICursoRepository
         _context = context;
     }
 
-    public async Task<int> AddVoto(Voto voto)
-    {
-        _context.Voto.Add(voto);
-        return await _context.SaveChangesAsync();
-
-    }
-
 
     private IQueryable<Curso> ApplySpecifications(ISpecification<Curso> spec)
     {
@@ -42,11 +35,7 @@ public class CursoRepository : ICursoRepository
 
     }
 
-    public async Task<int> CountAsync(ISpecification<Curso> spec)
-    {
-        return await ApplySpecifications(spec).CountAsync();
-    }
-
+  
     public async Task<IReadOnlyList<CursoVisto>> GetCursoVistos(string userID)
     {
         return await _context.CursoVistos.Where(c => c.UsuarioId == userID)

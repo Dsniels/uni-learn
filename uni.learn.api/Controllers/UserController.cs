@@ -211,20 +211,15 @@ namespace uni.learn.api.Controllers
             user.Nombre = dataset.Nombre;
             user.ApellidoPaterno = dataset.ApellidoPaterno;
             user.ApellidoMaterno = dataset.ApellidoMaterno;
-
-
             if (!string.IsNullOrEmpty(dataset.Password))
             {
                 user.PasswordHash = _passwordHasher.HashPassword(user, dataset.Password);
             }
-
             var result = await _userManager.UpdateAsync(user);
-
             if (!result.Succeeded)
             {
                 return BadRequest();
             }
-
 
             var roles = await _userManager.GetRolesAsync(user);
             var userDto = _mapper.Map<Usuario, UsuarioDto>(user);
